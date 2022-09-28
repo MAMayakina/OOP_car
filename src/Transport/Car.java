@@ -12,15 +12,22 @@ public class Car {
         private String keylessAccess;
 
         public Key(String remoteEngineStart, String keylessAccess) {
-            this.remoteEngineStart = remoteEngineStart;
-            this.keylessAccess = keylessAccess;
+            if (remoteEngineStart == null || remoteEngineStart.isEmpty() || remoteEngineStart.isBlank()) {
+                this.remoteEngineStart = "default";
+            } else {
+                this.remoteEngineStart = remoteEngineStart;
+            }
+            if (keylessAccess == null || keylessAccess.isEmpty() || keylessAccess.isBlank()) {
+                this.keylessAccess = "default";
+            } else {
+                this.keylessAccess = keylessAccess;
+            }
         }
 
         @Override
         public String toString() {
-            return "удаленный запуск двигателя " + remoteEngineStart + ", бесключевой доступ " + keylessAccess;
+            return "Удаленный запуск двигателя " + remoteEngineStart + ", бесключевой доступ " + keylessAccess;
         }
-
 
         public String getRemoteEngineStart() {
             return remoteEngineStart;
@@ -28,6 +35,39 @@ public class Car {
 
         public String getKeylessAccess() {
             return keylessAccess;
+        }
+    }
+
+    public class Insurance {
+        private String validityPeriod;
+        private int cost;
+        private String number;
+
+        public Insurance(String validityPeriod, int cost, String number) {
+            if (validityPeriod == null || validityPeriod.isEmpty() || validityPeriod.isBlank()) {
+                this.validityPeriod = "default";
+            } else {
+                this.validityPeriod = validityPeriod;
+            }
+            this.cost = cost;
+            this.number = number;
+        }
+
+        @Override
+        public String toString() {
+            return "срок действия страховки " + validityPeriod + ", стоимость страховки " + cost + ", номер страховки " + number;
+        }
+
+        public String getValidityPeriod() {
+            return validityPeriod;
+        }
+
+        public int getCost() {
+            return cost;
+        }
+
+        public String getNumber() {
+            return number;
         }
     }
 
@@ -43,6 +83,7 @@ public class Car {
     private int numberOfSeats;
     private String typeOfTires;
     private Key key;
+    private Insurance insurance;
 
 
     public Car(String model, String brand, int productionYear, String productionCountry, double engineVolume, String color, String transmission, String carBodyType, String registrationNumber, int numberOfSeats, String typeOfTires) {
@@ -125,9 +166,6 @@ public class Car {
         }
         if (typeOfTires != "default") {
             System.out.print(", шины " + typeOfTires);
-        }
-        if (getKey() != null) {
-            System.out.print(", " + getKey());
         }
         System.out.println();
     }
@@ -214,7 +252,30 @@ public class Car {
         this.key = key;
     }
 
+    public Insurance getInsurance() {
+        return insurance;
+    }
 
+    public void setInsurance(Insurance insurance) {
+        try {
+            LocalDate date = LocalDate.parse(insurance.validityPeriod);
+            int result = date.compareTo(LocalDate.now());
+            if (result < 0) {
+                insurance.validityPeriod = "просрочен";
+            }
+        } catch (Exception e) {
+            insurance.validityPeriod = "некорректен";
+        }
+        if (insurance.cost < 0) {
+            insurance.cost = 0;
+        }
+
+        if (insurance.number.length() != 9) {
+            insurance.number = "некорректный";
+        }
+
+        this.insurance = new Insurance(insurance.validityPeriod, insurance.cost, insurance.number);
+    }
 }
 
 

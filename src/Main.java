@@ -32,14 +32,20 @@ public class Main {
         //ключ
         Car.Key keyWithFeatures = new Car.Key("есть", "есть");
         Car.Key keyWithoutFeatures = new Car.Key("нет", "нет");
-        System.out.println("Автомобиль с ключом:");
-        car1.setKey(keyWithoutFeatures);
-        car1.getInformationAboutCar();
-        System.out.println("Автомобиль без ключа:");
-        car2.setKey(keyWithFeatures);
-        car2.getInformationAboutCar();
-        System.out.println("Автомобиль с null:");
-        car3.getInformationAboutCar();
 
+        car1.setKey(keyWithoutFeatures);
+        System.out.println("Автомобиль с ключом:" + car1.getKey());
+
+        car2.setKey(keyWithFeatures);
+        System.out.println("Автомобиль без ключа:"+ car2.getKey());
+
+        //страховка
+        Car.Insurance newIns1 = car1.new Insurance("2023-01-20",12000,"5114bg239");
+        car1.setInsurance(newIns1);
+        System.out.println("Страховка автомобиля 1: " + car1.getInsurance());
+
+        Car.Insurance newIns2 = car2.new Insurance("2020-01-20",18000,"514bg239");
+        car2.setInsurance(newIns2);
+        System.out.println("Страховка автомобиля 2: " + car2.getInsurance());
     }
 }
